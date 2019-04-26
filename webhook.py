@@ -9,6 +9,10 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
+@app.route("/")
+def hello():
+    return "Hello World!"
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
@@ -23,25 +27,30 @@ def webhook():
     return r
 
 def makeResponse(req):
-    if req.get("result").get("action") != "fetchWeatherForecast":
-        return {}
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    date = parameters.get("date")
-    if city is None:
-        return None
-    r=requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=06f070197b1f60e55231f8c46658d077')
-    json_object = r.json()
-    weather=json_object['list']
-    for i in range(0,30):
-        if date in weather[i]['dt_txt']:
-            condition= weather[i]['weather'][0]['description']
-            break
-    speech = "The forecast for"+city+ "for "+date+" is "+condition
+    # if req.get("result").get("action") != "fetchWeatherForecast":
+    #     return {}
+    # result = req.get("result")
+    # parameters = result.get("parameters")
+    # city = parameters.get("geo-city")
+    # date = parameters.get("date")
+    # if city is None:
+    #     return None
+    # r=requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=06f070197b1f60e55231f8c46658d077')
+    # json_object = r.json()
+    # weather=json_object['list']
+    # for i in range(0,30):
+    #     if date in weather[i]['dt_txt']:
+    #         condition= weather[i]['weather'][0]['description']
+    #         break
+    # speech = "The forecast for"+city+ "for "+date+" is "+condition
+    # return {
+    # "speech": speech,
+    # "displayText": speech,
+    # "source": "apiai-weather-webhook"
+    # }
     return {
-    "speech": speech,
-    "displayText": speech,
+    "speech": "speech",
+    "displayText": "speech",
     "source": "apiai-weather-webhook"
     }
 
